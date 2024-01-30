@@ -22,10 +22,18 @@ For testing, the application adds 5 vehicles (ids 100-104), which can be queried
 This is like a simple 3 layers model. 
 
 ## Models
-Basically, 
-
-
 ![image](https://github.com/rapontual/auctionmanager/assets/8179423/0d13f4d1-50cf-4a70-8a08-2308592447f5)
+
+## Notes
+To simplify the challenge test, I decided to use an API and some endpoints as a user interface. With Swagger it is possible to test the application without additional tools, such as Postman for example
+
+I didn't add tests to the API to speed up development. As all the logic is concentrated in the Service layer, I added tests covering this logic
+
+I used the same internal model to be exposed in the API. I always separate the models, in this case I shared the same model to simplify development
+
+I decided to use a repository layer because I wasn't sure if there would be time to implement a database. As I preferred the "code first" approach, it would be easy to add a database to this layer later, isolating its logic
+
+I tried to focus on the requirements, logic and tests, as these were the most important points I noticed in the challenge description
 
 
 
