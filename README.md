@@ -10,6 +10,16 @@ This project goal is to implement the "Car Auction Management System"
 There are no dependencies, no Docker containers, just clone the repository and run the application.
 For testing, the application adds 5 vehicles (ids 100-104), which can be queried by the /vehicle/serch endpoint
 
+1 - Call the POST /auction endpoing  to create/start an auction (e.g. id=100)  
+2 - Call the POST /auction/id/bid to bid on an auction  
+3 - Call the POST /auction/id/finish to close/finish an auction  
+
+
+![image](https://github.com/rapontual/auctionmanager/assets/8179423/6902271a-0127-447e-a1dc-28a43fcb523d)
+
+
+
+
 ## Architecture diagram
 ![image](https://github.com/rapontual/auctionmanager/assets/8179423/a9097cc0-3dfa-48c2-82f2-9112f364e098)
 
