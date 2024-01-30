@@ -62,7 +62,7 @@
         }
 
         [HttpPost("/auction/{id}/finish")]
-        public async Task<IResult> Finish(int id, double bidAmount)
+        public async Task<IResult> Finish(int id)
         {
             try
             {
