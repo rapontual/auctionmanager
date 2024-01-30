@@ -170,7 +170,93 @@
                 .Verify(v => v.UpdateAsync(It.IsAny<Auction>()), Times.Never);
         }
 
-        // Miss to add tests for the StartAuctionAsync method, but the logic is similar of the tests above
+        [Fact]
+        public async Task StartAuctionAsync_ShouldThrowExceptionWhenAuctionAlreadyExistsAsync()
+        {
+            // Arrange
+            var id = 20;
+            var expectedExceptionMessage = $"There is already an active auction for a Vehicle with the identifier {id}";
+            var auction = new Auction
+            {
+                Vehicle = new Vehicle
+                {
+                    Id = id,
+                    StartingBid = 0,
+                },
+                HigherBid = 12
+            };
 
+            auctionRepositoryMock
+                .Setup(s => s.GetActiveAuction(It.IsAny<int>()))
+                .ReturnsAsync(auction);
+
+            // Act & Assert
+            var result = await Assert.ThrowsAsync<InvalidAuctionException>(() => auctionManager.StartAuctionAsync(id));
+
+            Assert.Equal(result.Message, expectedExceptionMessage);
+
+            auctionRepositoryMock
+                .Verify(v => v.UpdateAsync(It.IsAny<Auction>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task StartAuctionAsync_ShouldThrowExceptionWhenVehicleDoesntExistAsync()
+        {
+            // Arrange
+            var id = 20;
+            var expectedExceptionMessage = $"There is no Vehicle with the identifier {id} in the inventory";
+            var auction = new Auction
+            {
+                Vehicle = new Vehicle
+                {
+                    Id = id,
+                    StartingBid = 0,
+                },
+                HigherBid = 12
+            };
+
+            auctionRepositoryMock
+                .Setup(s => s.GetActiveAuction(It.IsAny<int>()))
+                .ReturnsAsync(null as Auction);
+
+            vehicleRepositoryMock
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(null as Vehicle);
+
+            // Act & Assert
+            var result = await Assert.ThrowsAsync<InvalidAuctionException>(() => auctionManager.StartAuctionAsync(id));
+
+            Assert.Equal(result.Message, expectedExceptionMessage);
+
+            auctionRepositoryMock
+                .Verify(v => v.UpdateAsync(It.IsAny<Auction>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task StartAuctionAsync_ShouldStartAsync()
+        {
+            // Arrange
+            var id = 20;
+            var expectedExceptionMessage = $"There is no Vehicle with the identifier {id} in the inventory";
+            var vehicle = new Vehicle
+            {
+                Id = id,
+                StartingBid = 0,
+            };
+
+            auctionRepositoryMock
+                .Setup(s => s.GetActiveAuction(It.IsAny<int>()))
+                .ReturnsAsync(null as Auction);
+
+            vehicleRepositoryMock
+                .Setup(s => s.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(vehicle);
+
+            // Act & Assert
+            await auctionManager.StartAuctionAsync(id);
+
+            auctionRepositoryMock
+                .Verify(v => v.AddAsync(It.IsAny<Auction>()));
+        }
     }
 }
